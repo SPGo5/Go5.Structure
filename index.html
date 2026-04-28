@@ -9,29 +9,39 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; background: #04042A; font-family: 'Cinzel', serif; overflow: hidden; }
-#header { padding: 16px 40px 8px; }
+#header { padding: 12px 40px 8px; background: #04042A; z-index: 10; position: relative; }
 h1 { color: #CCFF00; font-size: 20px; letter-spacing: 0.2em; text-align: center; margin-bottom: 2px; }
 .sub { text-align: center; color: rgba(255,255,255,0.3); font-family: 'Grey Qo', cursive; font-size: 14px; margin-bottom: 6px; }
-#controls { text-align: center; margin-bottom: 6px; display: flex; justify-content: center; align-items: center; gap: 10px; }
+#legend { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; padding: 4px 40px 6px; }
+.leg { display: flex; align-items: center; gap: 6px; font-family: serif; font-size: 10px; color: rgba(255,255,255,0.5); }
+.sw { width: 18px; height: 11px; border-radius: 3px; border: 1.5px solid; flex-shrink: 0; }
+#controls { text-align: center; margin-top: 5px; display: flex; justify-content: center; align-items: center; gap: 10px; }
 #controls button { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #ccc;
   font-family: 'Cinzel', serif; font-size: 12px; padding: 4px 14px; border-radius: 20px; cursor: pointer; }
 #controls button:hover { background: rgba(255,255,255,0.16); }
 #zoom-label { color: rgba(255,255,255,0.4); font-size: 11px; min-width: 42px; text-align:center; }
 #wrap { position: relative; overflow: hidden; width: 100%;
-  height: calc(100vh - 130px); cursor: grab; user-select: none; }
+  height: calc(100vh - 120px); cursor: grab; user-select: none;
+  background: #020318;
+  border-top: 1px solid rgba(100,120,255,0.15);
+  border-bottom: 1px solid rgba(100,120,255,0.15); }
 #wrap.grabbing { cursor: grabbing; }
 #canvas { transform-origin: 0 0; will-change: transform; }
 svg { display: block; }
-#legend { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
-  padding: 6px 40px 10px; border-top: 1px solid rgba(255,255,255,0.06); }
-.leg { display: flex; align-items: center; gap: 6px; font-family: serif; font-size: 10px; color: rgba(255,255,255,0.45); }
-.sw { width: 18px; height: 11px; border-radius: 3px; border: 1.5px solid; flex-shrink: 0; }
 </style>
 </head>
 <body>
 <div id="header">
   <h1>五 Go — Super Portal</h1>
   <p class="sub">Navigation structure · read left → right</p>
+  <div id="legend">
+    <div class="leg"><div class="sw" style="background:#000073;border-color:#00BFFF;"></div>Hub</div>
+    <div class="leg"><div class="sw" style="background:#CBFFC0;border-color:#3A9E26;"></div>Portal</div>
+    <div class="leg"><div class="sw" style="background:#E0B0FF;border-color:#8833CC;"></div>External Link</div>
+    <div class="leg"><div class="sw" style="background:#00BFFF;border-color:#0090CC;"></div>In-app Tool</div>
+    <div class="leg"><div class="sw" style="background:#E8E8FF;border-color:#4455AA;"></div>Screen</div>
+    <div class="leg" style="opacity:.4;"><div class="sw" style="background:#bbb;border-color:#888;"></div>Soon</div>
+  </div>
   <div id="controls">
     <button onclick="zoom(-0.15)">－</button>
     <span id="zoom-label">100%</span>
@@ -41,14 +51,6 @@ svg { display: block; }
 </div>
 <div id="wrap">
   <div id="canvas"><svg id="diagram"></svg></div>
-</div>
-<div id="legend">
-  <div class="leg"><div class="sw" style="background:#000073;border-color:#00BFFF;"></div>Hub</div>
-  <div class="leg"><div class="sw" style="background:#CBFFC0;border-color:#3A9E26;"></div>Portal</div>
-  <div class="leg"><div class="sw" style="background:#E0B0FF;border-color:#8833CC;"></div>External Link</div>
-  <div class="leg"><div class="sw" style="background:#00BFFF;border-color:#0090CC;"></div>In-app Tool</div>
-  <div class="leg"><div class="sw" style="background:#E8E8FF;border-color:#4455AA;"></div>Screen</div>
-  <div class="leg" style="opacity:.4;"><div class="sw" style="background:#bbb;border-color:#888;"></div>Soon</div>
 </div>
 
 <script>
@@ -321,10 +323,10 @@ const MAP = {};
 NODES.forEach(n => MAP[n.id] = n);
 
 // ── Layout constants ──────────────────────────────────────────────────────────
-const COL_GAP  = 50;
-const ROW_GAP  = 10;
-const PAD_X    = 40;
-const PAD_Y    = 40;
+const COL_GAP  = 120;
+const ROW_GAP  = 16;
+const PAD_X    = 60;
+const PAD_Y    = 60;
 const GATE_PAD = 18;
 
 function nodeH(n)    { return n.boxH + (n.gate ? GATE_PAD : 0); }
@@ -430,11 +432,11 @@ function build() {
     const px = n.x + n.boxW, py = n.cy, mx = px + COL_GAP/2;
     n.children.forEach(cid => {
       const c = MAP[cid];
-      svg.appendChild(el('path',{fill:'none',stroke:'rgba(120,150,220,0.4)','stroke-width':'1.5',
+      svg.appendChild(el('path',{fill:'none',stroke:'rgba(255,200,60,0.75)','stroke-width':'2',
         d:`M ${px} ${py} H ${mx} V ${c.cy} H ${c.x}`}));
       svg.appendChild(el('polygon',{
-        points:`${c.x},${c.cy} ${c.x-8},${c.cy-5} ${c.x-8},${c.cy+5}`,
-        fill:'rgba(120,150,220,0.55)'}));
+        points:`${c.x},${c.cy} ${c.x-9},${c.cy-5} ${c.x-9},${c.cy+5}`,
+        fill:'rgba(255,200,60,0.85)'}));
     });
   });
 
