@@ -457,7 +457,6 @@ function build() {
   });
 
   // ── Nodes ──
-  const linkedGroups = [];
   all.forEach(n => {
     const t    = TYPE[n.type] || TYPE['Screen'];
     const nx   = n.x, ny = n.cy - n.boxH/2;
@@ -511,23 +510,25 @@ function build() {
         fill:'transparent', style:'cursor:pointer'
       });
       hitBox.addEventListener('click', () => window.open(n.url, '_blank'));
+      let leaveTimer = null;
       hitBox.addEventListener('mouseenter', () => {
+        if (leaveTimer) { clearTimeout(leaveTimer); leaveTimer = null; }
         const cx = nx + n.boxW / 2;
         const cy = n.cy;
+        svg.appendChild(g);
         g.style.transformOrigin = `${cx}px ${cy}px`;
         g.style.transition = 'transform 0.18s ease, filter 0.18s ease';
         g.style.transform = `scale(1.5)`;
         g.style.filter = `drop-shadow(0 0 12px ${t.border}) drop-shadow(0 0 28px ${t.border})`;
       });
       hitBox.addEventListener('mouseleave', () => {
-        g.style.transition = 'transform 0.18s ease, filter 0.18s ease';
-        g.style.transform = 'scale(1)';
-        g.style.filter = '';
+        leaveTimer = setTimeout(() => {
+          g.style.transition = 'transform 0.18s ease, filter 0.18s ease';
+          g.style.transform = 'scale(1)';
+          g.style.filter = '';
+          leaveTimer = null;
+        }, 50);
       });
-      // Pre-elevate: append to end of SVG now so it's always above non-linked nodes
-      // (will be re-appended after all nodes are drawn — done below)
-      g._linkedNode = true;
-      linkedGroups.push(g);
       g.appendChild(hitBox);
     }
 
@@ -647,9 +648,6 @@ function build() {
 
     svg.appendChild(g);
   });
-
-  // Re-append linked nodes to end of SVG — they always paint above everything else
-  linkedGroups.forEach(g => svg.appendChild(g));
 }
 
 document.fonts.ready.then(() => {
