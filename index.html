@@ -517,7 +517,8 @@ function build() {
         g.style.transform = `scale(1.5)`;
         g.style.transition = 'transform 0.18s ease, filter 0.18s ease';
         g.style.filter = `drop-shadow(0 0 12px ${t.border}) drop-shadow(0 0 28px ${t.border})`;
-        g.style.zIndex = '999';
+        // Move to end of SVG so it paints above all other nodes
+        svg.appendChild(g);
       });
       hitBox.addEventListener('mouseleave', () => {
         g.style.transform = 'scale(1)';
