@@ -77,7 +77,7 @@ const GLOW_COLOR = 'rgba(200,220,255,0.6)';
 const NODES = [
   // ── L0 ──────────────────────────────────────────────────────────────────────
   { id:'B0', emoji:'', name1:'Super Portal', name2:'Go 五', n2color:'#ccff00',
-    type:'Hub', status:'Live', gate:'', url:'',
+    type:'Hub', status:'Live', gate:'', url:'https://sites.google.com/view/SPGo',
     boxW:400, boxH:240, idSize:24, name1Size:30, name2Size:50,
     imgs:['https://i.postimg.cc/fRdF8YCj/Hibiscus_orange_5.png'],
     children:['B1.1','B1.2','B1.3','B1.4','B1.5','B1.E1'] },
@@ -85,36 +85,36 @@ const NODES = [
   // ── L1 ──────────────────────────────────────────────────────────────────────
   { id:'B1.1', emoji:'📅', name1:'擇日 Date Selection', name2:'Ajisai', n2color:'#ccff01',
     type:'Portal', status:'Live', gate:'', url:'',
-    boxW:400, boxH:240, idSize:18, name1Size:24, name2Size:40,
+    boxW:450, boxH:240, idSize:18, name1Size:24, name2Size:40,
     imgs:['https://i.postimg.cc/kD3H57dt/Ajisai-Portal-2Heads.png'],
     children:['B2.1.T1','B2.1.T2','B2.1.T3','B2.1.T4','B2.1.T5','B2.1.S1','B2.1.S2','B2.1.S3'] },
 
   { id:'B1.2', emoji:'', name1:'☯️ 奇門遁甲 QMDJ\n🔮 占卜  Divination', name2:'', n2color:'#ccff02',
     type:'Hub', status:'Live', gate:'', url:'',
-    boxW:400, boxH:240, idSize:18, name1Size:24, name2Size:0,
+    boxW:450, boxH:240, idSize:18, name1Size:24, name2Size:0,
     imgs:['https://i.postimg.cc/SRYGBpwy/QMDJ-i-Botan.png','https://i.postimg.cc/kgmb9JGx/tsutsuji_1_no_leave_2.png'],
     children:['B2.2.1','B2.2.2'] },
 
   { id:'B1.3', emoji:'🎭', name1:'Individual Life Study', name2:'', n2color:'#ccff03',
     type:'Hub', status:'Live', gate:'', url:'',
-    boxW:400, boxH:240, idSize:18, name1Size:24, name2Size:0,
+    boxW:450, boxH:240, idSize:18, name1Size:24, name2Size:0,
     imgs:['https://i.postimg.cc/TwN0qW23/Rose-Thao-Dien-Mam-03-26.png','https://i.postimg.cc/7YhrDb9B/Fuki-portal-image.png'],
     children:['B2.3.1','B2.3.2'] },
 
   { id:'B1.4', emoji:'🏘️', name1:'風水 Fengshui', name2:'', n2color:'#ccff04',
     type:'Portal', status:'Live', gate:'', url:'',
-    boxW:400, boxH:240, idSize:18, name1Size:24, name2Size:0,
+    boxW:450, boxH:240, idSize:18, name1Size:24, name2Size:0,
     imgs:['https://i.postimg.cc/13SDRFLD/FS-i-Manju.png'],
     children:['B2.4.T1','B2.4.T2','B2.4.T3','B2.4.S1','B2.4.S2','B2.4.S3','B2.4.S4','B2.4.S5','B2.4.S6'] },
 
   { id:'B1.5', emoji:'☯', name1:'易經 Yi Jing', name2:'Tenjiku', n2color:'#ccff05',
-    type:'External Link', status:'Live', gate:'col M', url:'',
-    boxW:400, boxH:240, idSize:18, name1Size:24, name2Size:40,
+    type:'External Link', status:'Live', gate:'col M', url:'https://sites.google.com/view/yijingitenjiku',
+    boxW:450, boxH:240, idSize:18, name1Size:24, name2Size:40,
     imgs:['https://i.postimg.cc/g0MQdmBz/Yijing-I-tenjiku.png'], children:[] },
 
   { id:'B1.E1', emoji:'👤', name1:'Your Personal Portal', name2:'Kuchinashi', n2color:'#ccff06',
     type:'External Link', status:'Live', gate:'col C', url:'',
-    boxW:400, boxH:240, idSize:18, name1Size:24, name2Size:40,
+    boxW:450, boxH:240, idSize:18, name1Size:24, name2Size:40,
     imgs:['https://i.postimg.cc/qqwDTzrF/Kuchinashi.png'], children:[] },
 
   // ── L2 — from B1.1 ──────────────────────────────────────────────────────────
@@ -140,17 +140,17 @@ const NODES = [
     imgs:['https://i.postimg.cc/Jn0gckSD/Boddhisattva-cutting-hai.png'], children:[] },
 
   { id:'B2.1.S1', emoji:'💠', name1:'DS (iii) Ajisai', name2:'', n2color:'#ccff12',
-    type:'External Link', status:'Live', gate:'', url:'',
+    type:'External Link', status:'Live', gate:'', url:'https://sites.google.com/view/dsiiiajisai',
     boxW:360, boxH:216, idSize:14, name1Size:20, name2Size:0,
     imgs:['https://i.postimg.cc/15ky2Vyf/ajisai-DS.png'], children:[] },
 
   { id:'B2.1.S2', emoji:'〇', name1:'Auxiliary Stars', name2:'Sora', n2color:'#ccff13',
-    type:'External Link', status:'Live', gate:'', url:'',
+    type:'External Link', status:'Live', gate:'', url:'https://sites.google.com/view/auxiliarystarssora',
     boxW:360, boxH:216, idSize:14, name1Size:20, name2Size:33,
     imgs:[], children:[] },
 
   { id:'B2.1.S3', emoji:'🔤', name1:'Chn (i)', name2:'Ginkgo', n2color:'#ccff14',
-    type:'External Link', status:'Live', gate:'', url:'',
+    type:'External Link', status:'Live', gate:'', url:'https://sites.google.com/view/chniginkgo',
     boxW:360, boxH:216, idSize:14, name1Size:20, name2Size:33,
     imgs:['https://i.postimg.cc/fRm85t91/Ginkgo-Chn-i.png'], children:[] },
 
@@ -196,93 +196,93 @@ const NODES = [
     imgs:['https://i.postimg.cc/4ympFdWS/Ume-fsvii.png'], children:[] },
 
   { id:'B2.4.S1', emoji:'', name1:'FS (i)', name2:'Maju', n2color:'#ccff22',
-    type:'External Link', status:'Live', gate:'col D', url:'',
+    type:'External Link', status:'Live', gate:'col D', url:'https://sites.google.com/view/fsimanju',
     boxW:360, boxH:216, idSize:14, name1Size:20, name2Size:33,
     imgs:['https://i.postimg.cc/13SDRFLD/FS-i-Manju.png'], children:[] },
 
   { id:'B2.4.S2', emoji:'', name1:'FS (ii)', name2:'Shage', n2color:'#ccff23',
-    type:'External Link', status:'Live', gate:'col E', url:'',
+    type:'External Link', status:'Live', gate:'col E', url:'https://sites.google.com/view/fsiishage',
     boxW:360, boxH:216, idSize:14, name1Size:20, name2Size:33,
     imgs:['https://i.postimg.cc/VsSqKmq5/FS-ii-Shage.png'], children:[] },
 
   { id:'B2.4.S3', emoji:'', name1:'FS (iii)', name2:'Higanbana', n2color:'#ccff24',
-    type:'External Link', status:'Live', gate:'col N', url:'',
+    type:'External Link', status:'Live', gate:'col N', url:'https://sites.google.com/view/fsiiihiganbana',
     boxW:360, boxH:216, idSize:14, name1Size:20, name2Size:33,
     imgs:['https://i.postimg.cc/kG6tvH48/Higanbana.png'], children:[] },
 
   { id:'B2.4.S4', emoji:'', name1:'FS (iv)', name2:'Kurinso', n2color:'#ccff25',
-    type:'External Link', status:'Live', gate:'col O', url:'',
+    type:'External Link', status:'Live', gate:'col O', url:'https://sites.google.com/view/fsivkurinso',
     boxW:360, boxH:216, idSize:14, name1Size:20, name2Size:33,
     imgs:['https://i.postimg.cc/d0dgkQvX/Primula-white.png'], children:[] },
 
   { id:'B2.4.S5', emoji:'', name1:'FS (v)', name2:'Sokei', n2color:'#ccff26',
-    type:'External Link', status:'Live', gate:'col D/E', url:'',
+    type:'External Link', status:'Live', gate:'col D/E', url:'https://sites.google.com/view/fsvsokei',
     boxW:360, boxH:216, idSize:14, name1Size:20, name2Size:33,
     imgs:['https://i.postimg.cc/9M0MFXmG/FS-v-Sokei.png'], children:[] },
 
   { id:'B2.4.S6', emoji:'', name1:'FS (vi)', name2:'Kuchinashi', n2color:'#ccff27',
-    type:'External Link', status:'Live', gate:'col D/E', url:'',
+    type:'External Link', status:'Live', gate:'col D/E', url:'https://sites.google.com/view/fsvikuchinashi',
     boxW:360, boxH:216, idSize:14, name1Size:20, name2Size:33,
     imgs:['https://i.postimg.cc/qqwDTzrF/Kuchinashi.png'], children:[] },
 
   // ── L3 — from B2.2.1 ────────────────────────────────────────────────────────
   { id:'B2.2.1.S1', emoji:'', name1:'QMDJ (i)', name2:'Botan', n2color:'#ccff28',
-    type:'External Link', status:'Live', gate:'', url:'',
+    type:'External Link', status:'Live', gate:'', url:'https://sites.google.com/view/qmdjibotan',
     boxW:300, boxH:180, idSize:10, name1Size:14, name2Size:23,
     imgs:['https://i.postimg.cc/SRYGBpwy/QMDJ-i-Botan.png'], children:[] },
 
   { id:'B2.2.1.S2', emoji:'', name1:'QMDJ (ii)', name2:'Take', n2color:'#ccff29',
-    type:'External Link', status:'Live', gate:'', url:'',
+    type:'External Link', status:'Live', gate:'', url:'https://sites.google.com/view/qmdjiitake',
     boxW:300, boxH:180, idSize:10, name1Size:14, name2Size:23, imgs:[], children:[] },
 
   { id:'B2.2.1.S3', emoji:'', name1:'QMDJ (iii)', name2:'Shoubu', n2color:'#ccff30',
-    type:'External Link', status:'Live', gate:'', url:'',
+    type:'External Link', status:'Live', gate:'', url:'https://sites.google.com/view/qmdjiiishoubu',
     boxW:300, boxH:180, idSize:10, name1Size:14, name2Size:23,
     imgs:['https://i.postimg.cc/0ygb2Fbw/Iris-Shobu-logo-web.png'], children:[] },
 
   { id:'B2.2.1.S4', emoji:'', name1:'QMDJ (iv)', name2:'Tsubaki', n2color:'#ccff31',
-    type:'External Link', status:'Live', gate:'', url:'',
+    type:'External Link', status:'Live', gate:'', url:'https://sites.google.com/view/qmdjivtsubaki',
     boxW:300, boxH:180, idSize:10, name1Size:14, name2Size:23,
     imgs:['https://i.postimg.cc/vHr8vzQj/Tsubaki-3.png'], children:[] },
 
   { id:'B2.2.1.S5', emoji:'', name1:'QMDJ (v)', name2:'Mizuka', n2color:'#ccff32',
-    type:'External Link', status:'Live', gate:'', url:'',
+    type:'External Link', status:'Live', gate:'', url:'https://sites.google.com/view/qmdjvmizuka',
     boxW:300, boxH:180, idSize:10, name1Size:14, name2Size:23,
     imgs:['https://i.postimg.cc/15ybjZP5/Mizuka.png'], children:[] },
 
   // ── L3 — from B2.2.2 ────────────────────────────────────────────────────────
   { id:'B2.2.2.T1', emoji:'🎲', name1:'Dice Roller', name2:'Saikoro', n2color:'#ccff33',
-    type:'In-app Tool', status:'Live', gate:'', url:'',
+    type:'In-app Tool', status:'Live', gate:'', url:'https://spgo5.github.io/Go5.DiceRoller/',
     boxW:300, boxH:180, idSize:10, name1Size:14, name2Size:23,
     imgs:['https://i.postimg.cc/2Sw1KPTF/2-d6.png'], children:[] },
 
   { id:'B2.2.2.T2', emoji:'🔮', name1:'觀音靈簽 Guan Yin Oracle', name2:'GYO', n2color:'#ccff34',
-    type:'In-app Tool', status:'Live', gate:'', url:'',
+    type:'In-app Tool', status:'Live', gate:'', url:'https://spgo5.github.io/Go5.GYO/',
     boxW:300, boxH:180, idSize:10, name1Size:14, name2Size:23,
     imgs:['https://i.postimg.cc/cLc0dSD1/Kwan-Yin.png'], children:[] },
 
   { id:'B2.2.2.T3', emoji:'🔮', name1:'郭璞數 Oracle', name2:'GFO', n2color:'#ccff35',
-    type:'In-app Tool', status:'Soon', gate:'', url:'',
+    type:'In-app Tool', status:'Soon', gate:'', url:'https://spgo5.github.io/Go5.GFO/',
     boxW:300, boxH:180, idSize:10, name1Size:14, name2Size:23, imgs:[], children:[] },
 
   { id:'B2.2.2.T4', emoji:'', name1:'Fortune Wheel', name2:'Fukubiki', n2color:'#ccff36',
-    type:'In-app Tool', status:'Soon', gate:'', url:'',
+    type:'In-app Tool', status:'Soon', gate:'', url:'https://spgo5.github.io/Go5.FW/',
     boxW:300, boxH:180, idSize:10, name1Size:14, name2Size:23, imgs:[], children:[] },
 
   { id:'B2.2.2.S1', emoji:'', name1:'Divination (i)', name2:'Tsutsuji', n2color:'#ccff37',
-    type:'External Link', status:'Live', gate:'', url:'',
+    type:'External Link', status:'Live', gate:'', url:'https://sites.google.com/view/divinationitsutsuji',
     boxW:300, boxH:180, idSize:10, name1Size:14, name2Size:23,
     imgs:['https://i.postimg.cc/kgmb9JGx/tsutsuji_1_no_leave_2.png'], children:[] },
 
   // ── L3 — from B2.3.1 ────────────────────────────────────────────────────────
   { id:'B3.3.1', emoji:'', name1:'2Hs Subportal', name2:'Ran-Yuri', n2color:'#ccff38',
-    type:'Portal', status:'Live', gate:'', url:'',
+    type:'Portal', status:'Live', gate:'', url:'https://spgo5.github.io/Go5.2Hs/',
     boxW:300, boxH:180, idSize:10, name1Size:14, name2Size:23,
     imgs:['https://i.postimg.cc/MZsnjcLC/Blue-Orchid-Web-Email.png','https://i.postimg.cc/K8kWmKK7/Kisuge-single-web-email.png'],
     children:['B3.3.1.T1','B3.3.1.T2','B3.3.1.T3'] },
 
   { id:'B3.3.1.S1', emoji:'', name1:'Bazi (i)', name2:'Bara', n2color:'#ccff39',
-    type:'External Link', status:'Live', gate:'col G', url:'',
+    type:'External Link', status:'Live', gate:'col G', url:'https://sites.google.com/view/baziibara',
     boxW:300, boxH:180, idSize:10, name1Size:14, name2Size:23,
     imgs:['https://i.postimg.cc/5NJLmvn2/bazi_i_Bara.png'], children:[] },
 
@@ -323,9 +323,9 @@ const MAP = {};
 NODES.forEach(n => MAP[n.id] = n);
 
 // ── Layout constants ──────────────────────────────────────────────────────────
-const COL_GAP  = 120;
+const COL_GAP  = 480;
 const ROW_GAP  = 16;
-const PAD_X    = 60;
+const PAD_X    = 80;
 const PAD_Y    = 60;
 const GATE_PAD = 18;
 
@@ -532,7 +532,7 @@ function build() {
       const n2span = document.createElementNS(NS, 'tspan');
       n2span.setAttribute('font-family', "'Grey Qo', cursive");
       n2span.setAttribute('font-size', n.name2Size);
-      n2span.setAttribute('font-weight', 400);
+      n2span.setAttribute('font-weight', 600);
       n2span.setAttribute('fill', n.n2color);
       // Align baselines: Grey Qo is taller so shift it down slightly
       n2span.setAttribute('dy', ((n.name2Size - n.name1Size) * 0.22).toFixed(1));
@@ -580,6 +580,15 @@ function build() {
         x: nx + n.boxW - 9, y: ny + 14,
         'font-family':'Cinzel, serif', 'font-size':9, 'font-weight':700,
         fill:'#999', 'text-anchor':'end', 'letter-spacing':'0.1em', 'pointer-events':'none'
+      }));
+    }
+
+    // ── Link indicator (bottom-right corner) ──
+    if (n.url) {
+      g.appendChild(txt('↗', {
+        x: nx + n.boxW - 7, y: ny + n.boxH - 7,
+        'font-family':'Arial, sans-serif', 'font-size': Math.max(n.idSize * 0.9, 9),
+        fill:'rgba(255,255,180,0.7)', 'text-anchor':'end', 'pointer-events':'none'
       }));
     }
 
