@@ -492,7 +492,7 @@ function build() {
       g.setAttribute('style',
         `cursor:pointer;transform-origin:${cx}px ${cy}px;transition:filter 0.2s ease;--hc:${t.border};`
       );
-      g.addEventListener('click', () => window.open(n.url, '_blank'));
+      // click handled by overlay system below — NOT here, to avoid double-open
     }
 
     // ── Ambient glow ring for linked nodes ──
@@ -718,91 +718,108 @@ document.fonts.ready.then(() => {
 
   // ── Magnifier mode ──
   let magMode = false;
+  let magOpen = false;
+  let magNode = null;
+
+  // ── Mag mode hint ──
+  const magHint = document.createElement('div');
+  magHint.textContent = '🔍 Click any button to magnify · Click again to close';
+  magHint.style.cssText = `position:fixed;bottom:12px;left:50%;transform:translateX(-50%);
+    z-index:10001;pointer-events:none;opacity:0;transition:opacity 0.2s ease;
+    color:rgba(255,220,60,0.85);font-family:'Cinzel',serif;font-size:11px;
+    text-shadow:0 0 8px rgba(255,220,0,0.5);white-space:nowrap;`;
+  document.body.appendChild(magHint);
+
   window.toggleMag = function() {
     magMode = !magMode;
-    const btn = document.getElementById('mag-btn');
-    const lbl = document.getElementById('mag-label');
-    btn.classList.toggle('active', magMode);
-    lbl.textContent = magMode ? 'On' : 'Off';
-    hideAll();
+    document.getElementById('mag-btn').classList.toggle('active', magMode);
+    document.getElementById('mag-label').textContent = magMode ? 'On' : 'Off';
+    magHint.style.opacity = magMode ? '1' : '0';
+    closeMag();
   };
 
-  // ── Blur overlay ──
+  // ── Blur backdrop ──
   const blurOverlay = document.createElement('div');
-  blurOverlay.style.cssText = `position:fixed;inset:0;z-index:9990;backdrop-filter:blur(6px);
-    background:rgba(2,3,24,0.55);pointer-events:none;opacity:0;transition:opacity 0.2s ease;`;
+  blurOverlay.style.cssText = `position:fixed;inset:0;z-index:9990;
+    backdrop-filter:blur(7px);background:rgba(2,3,24,0.6);
+    pointer-events:none;opacity:0;transition:opacity 0.2s ease;`;
   document.body.appendChild(blurOverlay);
 
-  // ── Magnifier panel (click-activated, stays open) ──
+  // ── Magnifier panel ──
   const magPanel = document.createElement('div');
   magPanel.style.cssText = `position:fixed;z-index:9999;opacity:0;pointer-events:none;
-    border-radius:16px;overflow:hidden;transition:opacity 0.2s ease;background:transparent;`;
+    transition:opacity 0.2s ease;background:transparent;overflow:visible;`;
   document.body.appendChild(magPanel);
 
-  // ── "Click to open" label under mag panel ──
+  // ── "Click to open" label ──
   const clickLabel = document.createElement('div');
   clickLabel.style.cssText = `position:fixed;z-index:10000;pointer-events:none;opacity:0;
     color:#FFE000;font-family:'Cinzel',serif;font-size:13px;font-weight:600;
     text-shadow:0 0 10px #FFE000,0 0 20px #FFE000;text-align:center;
-    transition:opacity 0.18s ease;`;
+    transition:opacity 0.15s ease;`;
   document.body.appendChild(clickLabel);
-
-  // ── Instruction label in mag mode ──
-  const magHint = document.createElement('div');
-  magHint.textContent = '🔍 Click a button to magnify · Click again to close';
-  magHint.style.cssText = `position:fixed;bottom:14px;left:50%;transform:translateX(-50%);
-    z-index:10001;pointer-events:none;opacity:0;transition:opacity 0.2s ease;
-    color:rgba(255,220,60,0.8);font-family:'Cinzel',serif;font-size:11px;
-    text-shadow:0 0 8px rgba(255,220,0,0.5);white-space:nowrap;`;
-  document.body.appendChild(magHint);
-
-  // ── Normal hover overlay (only for linked nodes, non-mag mode) ──
-  const hoverOverlay = document.createElement('div');
-  hoverOverlay.style.cssText = `position:fixed;z-index:9995;opacity:0;pointer-events:none;
-    border-radius:12px;overflow:hidden;transition:opacity 0.15s ease;background:transparent;`;
-  document.body.appendChild(hoverOverlay);
-
-  let magOpen = false;   // is mag panel currently showing a node
-  let magNode = null;    // which node is magnified
 
   function buildMiniSvg(g, dispW, dispH) {
     const svgEl  = document.getElementById('diagram');
-    const nsBBox = g.getBBox();
-    const PAD    = 18;
+    const PAD    = 16;
+    // Use only the main box bbox — exclude gate text by using box dimensions directly
+    const nodeId = g.getAttribute('data-node');
+    const n      = MAP[nodeId];
+    const bx     = n.x - PAD;
+    const by     = n.cy - n.boxH/2 - PAD;
+    const bw     = n.boxW + PAD*2;
+    const bh     = n.boxH + PAD*2;
+
     const miniSvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
     miniSvg.setAttribute('width',  dispW);
     miniSvg.setAttribute('height', dispH);
-    miniSvg.setAttribute('viewBox',
-      `${nsBBox.x-PAD} ${nsBBox.y-PAD} ${nsBBox.width+PAD*2} ${nsBBox.height+PAD*2}`);
+    miniSvg.setAttribute('viewBox', `${bx} ${by} ${bw} ${bh}`);
     miniSvg.style.cssText = 'display:block;overflow:visible;background:transparent;';
+
     const origDefs = svgEl.querySelector('defs');
     if (origDefs) miniSvg.appendChild(origDefs.cloneNode(true));
+
     const clone = g.cloneNode(true);
-    clone.classList.remove('linked-node');
+    clone.removeAttribute('class');
     clone.removeAttribute('style');
+    clone.setAttribute('opacity','1');
+    // Remove gate text from clone (last text child that contains 🔒)
+    Array.from(clone.querySelectorAll('text')).forEach(t => {
+      if (t.textContent.includes('🔒')) t.remove();
+    });
     miniSvg.appendChild(clone);
     return miniSvg;
   }
 
-  function openMagPanel(g) {
-    const hasUrl = !!g.dataset.url;
-    const borderColor = g.style.getPropertyValue('--hc') || 'rgba(200,150,255,0.8)';
+  function openMag(g) {
+    const hasUrl      = !!g.dataset.url;
+    const nodeId      = g.getAttribute('data-node');
+    const n           = MAP[nodeId];
+    const t           = TYPE[n.type] || TYPE['Screen'];
+    const borderColor = t.border;
+
     const magW = Math.round(window.innerWidth  / 3);
     const magH = Math.round(window.innerHeight / 3);
     const magL = Math.round((window.innerWidth  - magW) / 2);
-    const magT = Math.round((window.innerHeight - magH) / 2) - 40;
+    const magT = Math.round((window.innerHeight - magH) / 2) - 30;
 
+    magPanel.innerHTML = '';
     magPanel.style.width  = magW + 'px';
     magPanel.style.height = magH + 'px';
     magPanel.style.left   = magL + 'px';
     magPanel.style.top    = magT + 'px';
-    magPanel.style.boxShadow = `0 0 30px 8px ${borderColor}, 0 0 60px 16px ${borderColor}`;
-    magPanel.style.pointerEvents = 'auto';
-    magPanel.style.cursor = hasUrl ? 'pointer' : 'default';
-    magPanel.innerHTML = '';
+    magPanel.style.boxShadow = `0 0 30px 8px ${borderColor}, 0 0 60px 18px ${borderColor}`;
+    magPanel.style.borderRadius = '14px';
+    magPanel.style.overflow = 'visible';
     magPanel.appendChild(buildMiniSvg(g, magW, magH));
     magPanel.style.opacity = '1';
-    magPanel.onclick = hasUrl ? () => window.open(g.dataset.url, '_blank') : null;
+    magPanel.style.pointerEvents = hasUrl ? 'auto' : 'none';
+    magPanel.style.cursor = hasUrl ? 'pointer' : 'default';
+    // Single click on panel opens link — only set AFTER panel is shown
+    magPanel.onclick = hasUrl ? (e) => {
+      e.stopPropagation();
+      window.open(g.dataset.url, '_blank');
+    } : null;
 
     blurOverlay.style.opacity = '1';
     magOpen = true;
@@ -811,88 +828,47 @@ document.fonts.ready.then(() => {
     if (hasUrl) {
       clickLabel.textContent = '↗ Click to open';
       clickLabel.style.left  = magL + 'px';
-      clickLabel.style.top   = (magT + magH + 12) + 'px';
+      clickLabel.style.top   = (magT + magH + 14) + 'px';
       clickLabel.style.width = magW + 'px';
       clickLabel.style.opacity = '1';
     }
   }
 
-  function closeMagPanel() {
+  function closeMag() {
     magPanel.style.opacity = '0';
     magPanel.style.pointerEvents = 'none';
+    magPanel.onclick = null;
     blurOverlay.style.opacity = '0';
     clickLabel.style.opacity = '0';
     magOpen = false;
     magNode = null;
   }
 
-  function hideAll() {
-    closeMagPanel();
-    hoverOverlay.style.opacity = '0';
-  }
-
   // ── Wire up all nodes ──
   document.querySelectorAll('g[data-node]').forEach(g => {
     const hasUrl = !!g.dataset.url;
 
-    // MAGNIFIER MODE: click to open/close, no hover
     g.addEventListener('click', (e) => {
-      if (!magMode) return;
       e.stopPropagation();
-      if (magOpen && magNode === g) { closeMagPanel(); return; }
-      openMagPanel(g);
+
+      if (magMode) {
+        // Mag mode: toggle open/close, NEVER directly open URL from node click
+        if (magOpen && magNode === g) { closeMag(); return; }
+        openMag(g);
+        return;
+      }
+
+      // Normal mode: only linked nodes open URL on click
+      if (hasUrl) window.open(g.dataset.url, '_blank');
     });
-
-    // NORMAL MODE: hover expand only for LINKED nodes
-    if (hasUrl) {
-      g.addEventListener('mouseenter', () => {
-        if (magMode) return;
-        const bbox = g.getBoundingClientRect();
-        const borderColor = g.style.getPropertyValue('--hc') || 'rgba(200,150,255,0.8)';
-        const w = bbox.width, h = bbox.height;
-        hoverOverlay.style.width  = w + 'px';
-        hoverOverlay.style.height = h + 'px';
-        hoverOverlay.style.left   = (bbox.left) + 'px';
-        hoverOverlay.style.top    = (bbox.top)  + 'px';
-        hoverOverlay.style.transform = 'scale(1.5)';
-        hoverOverlay.style.transformOrigin = 'center center';
-        hoverOverlay.style.boxShadow = `0 0 18px 4px ${borderColor}, 0 0 40px 8px ${borderColor}`;
-        hoverOverlay.style.pointerEvents = 'auto';
-        hoverOverlay.style.cursor = 'pointer';
-        hoverOverlay.innerHTML = '';
-        hoverOverlay.appendChild(buildMiniSvg(g, w, h));
-        hoverOverlay.style.opacity = '1';
-        hoverOverlay.onclick = () => window.open(g.dataset.url, '_blank');
-      });
-      g.addEventListener('mouseleave', () => {
-        if (magMode) return;
-        hoverOverlay.style.opacity = '0';
-        hoverOverlay.style.pointerEvents = 'none';
-      });
-      // keep overlay alive when mouse moves onto it
-      hoverOverlay.addEventListener('mouseleave', () => {
-        hoverOverlay.style.opacity = '0';
-        hoverOverlay.style.pointerEvents = 'none';
-      });
-    }
   });
 
-  // Click anywhere else closes mag panel
-  document.addEventListener('click', (e) => {
-    if (!magMode || !magOpen) return;
-    if (!magPanel.contains(e.target) && !e.target.closest('g[data-node]')) {
-      closeMagPanel();
-    }
+  // Click outside mag panel closes it
+  document.addEventListener('click', () => {
+    if (magMode && magOpen) closeMag();
   });
 
-  // Show/hide hint when mag mode toggles
-  const origToggle = window.toggleMag;
-  window.toggleMag = function() {
-    origToggle();
-    magHint.style.opacity = magMode ? '1' : '0';
-  };
-
-  wrap.addEventListener('wheel', hideAll, {passive:true});
+  wrap.addEventListener('wheel', closeMag, {passive:true});
 });
 </script>
 </body>
