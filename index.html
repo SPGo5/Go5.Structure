@@ -723,11 +723,13 @@ document.fonts.ready.then(() => {
 
   // ── Mag mode hint ──
   const magHint = document.createElement('div');
-  magHint.textContent = '🔍 Click any button to magnify · Click again to close';
-  magHint.style.cssText = `position:fixed;bottom:12px;left:50%;transform:translateX(-50%);
+  magHint.textContent = '🔍 Click any button to magnify · Click magnified button again to close';
+  magHint.style.cssText = `position:fixed;top:108px;left:50%;transform:translateX(-50%);
     z-index:10001;pointer-events:none;opacity:0;transition:opacity 0.2s ease;
-    color:rgba(255,220,60,0.85);font-family:'Cinzel',serif;font-size:11px;
-    text-shadow:0 0 8px rgba(255,220,0,0.5);white-space:nowrap;`;
+    color:rgba(255,220,60,0.9);font-family:'Cinzel',serif;font-size:11px;
+    text-shadow:0 0 8px rgba(255,220,0,0.6);white-space:nowrap;
+    background:rgba(2,3,24,0.7);padding:4px 14px;border-radius:20px;
+    border:1px solid rgba(255,220,0,0.3);`;
   document.body.appendChild(magHint);
 
   window.toggleMag = function() {
@@ -844,10 +846,11 @@ document.fonts.ready.then(() => {
     magNode = null;
   }
 
-  // ── Hover overlay (normal mode only, linked nodes only) ──
+  // ── Hover overlay (normal mode, linked nodes only) ──
   const hoverOverlay = document.createElement('div');
   hoverOverlay.style.cssText = `position:fixed;z-index:9995;opacity:0;pointer-events:none;
-    border-radius:12px;overflow:visible;transition:opacity 0.15s ease;background:transparent;`;
+    overflow:visible;transition:opacity 0.15s ease;background:transparent;
+    border:none;box-shadow:none;border-radius:0;`;
   document.body.appendChild(hoverOverlay);
 
   hoverOverlay.addEventListener('mouseleave', () => {
@@ -859,24 +862,24 @@ document.fonts.ready.then(() => {
   document.querySelectorAll('g[data-node]').forEach(g => {
     const hasUrl = !!g.dataset.url;
 
-    // Normal mode hover — linked only
     if (hasUrl) {
       g.addEventListener('mouseenter', () => {
         if (magMode) return;
-        const bbox = g.getBoundingClientRect();
+        const bbox   = g.getBoundingClientRect();
         const nodeId = g.getAttribute('data-node');
-        const n = MAP[nodeId];
-        const t = TYPE[n.type] || TYPE['Screen'];
+        const n      = MAP[nodeId];
+        const t      = TYPE[n.type] || TYPE['Screen'];
         const w = bbox.width, h = bbox.height;
-        hoverOverlay.style.width  = w + 'px';
-        hoverOverlay.style.height = h + 'px';
-        hoverOverlay.style.left   = bbox.left + 'px';
-        hoverOverlay.style.top    = bbox.top  + 'px';
-        hoverOverlay.style.transform = 'scale(1.5)';
+        // Position exactly over original, then scale from center
+        hoverOverlay.style.width           = w + 'px';
+        hoverOverlay.style.height          = h + 'px';
+        hoverOverlay.style.left            = bbox.left + 'px';
+        hoverOverlay.style.top             = bbox.top  + 'px';
+        hoverOverlay.style.transform       = 'scale(1.5)';
         hoverOverlay.style.transformOrigin = 'center center';
-        hoverOverlay.style.boxShadow = `0 0 18px 4px ${t.border}, 0 0 40px 8px ${t.border}`;
-        hoverOverlay.style.pointerEvents = 'auto';
-        hoverOverlay.style.cursor = 'pointer';
+        hoverOverlay.style.filter          = `drop-shadow(0 0 10px ${t.border}) drop-shadow(0 0 24px ${t.border})`;
+        hoverOverlay.style.pointerEvents   = 'auto';
+        hoverOverlay.style.cursor          = 'pointer';
         hoverOverlay.innerHTML = '';
         hoverOverlay.appendChild(buildMiniSvg(g, w, h));
         hoverOverlay.style.opacity = '1';
@@ -884,8 +887,10 @@ document.fonts.ready.then(() => {
       });
       g.addEventListener('mouseleave', () => {
         if (magMode) return;
-        // small delay so mouse can move onto the overlay without it vanishing
-        setTimeout(() => { hoverOverlay.style.opacity = '0'; hoverOverlay.style.pointerEvents = 'none'; }, 80);
+        setTimeout(() => {
+          hoverOverlay.style.opacity = '0';
+          hoverOverlay.style.pointerEvents = 'none';
+        }, 60);
       });
     }
 
