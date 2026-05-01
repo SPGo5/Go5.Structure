@@ -64,6 +64,13 @@ svg { display: block; overflow: visible; }
       <span id="mag-label">Off</span>
     </div>
   </div>
+  <div id="mag-hint-bar" style="text-align:center;height:0;overflow:hidden;transition:height 0.2s ease;">
+    <span id="mag-hint-text" style="font-family:'Cinzel',serif;font-size:10px;
+      color:rgba(255,220,60,0.9);text-shadow:0 0 8px rgba(255,220,0,0.5);
+      display:inline-block;padding:2px 0;">
+      🔍 Click any button to magnify · Click same button again to close
+    </span>
+  </div>
 </div>
 <div id="wrap">
   <div id="canvas"><svg id="diagram"></svg></div>
@@ -722,21 +729,11 @@ document.fonts.ready.then(() => {
   let magNode = null;
 
   // ── Mag mode hint ──
-  const magHint = document.createElement('div');
-  magHint.textContent = '🔍 Click any button to magnify · Click magnified button again to close';
-  magHint.style.cssText = `position:fixed;top:108px;left:50%;transform:translateX(-50%);
-    z-index:10001;pointer-events:none;opacity:0;transition:opacity 0.2s ease;
-    color:rgba(255,220,60,0.9);font-family:'Cinzel',serif;font-size:11px;
-    text-shadow:0 0 8px rgba(255,220,0,0.6);white-space:nowrap;
-    background:rgba(2,3,24,0.7);padding:4px 14px;border-radius:20px;
-    border:1px solid rgba(255,220,0,0.3);`;
-  document.body.appendChild(magHint);
-
   window.toggleMag = function() {
     magMode = !magMode;
     document.getElementById('mag-btn').classList.toggle('active', magMode);
     document.getElementById('mag-label').textContent = magMode ? 'On' : 'Off';
-    magHint.style.opacity = magMode ? '1' : '0';
+    document.getElementById('mag-hint-bar').style.height = magMode ? '20px' : '0';
     closeMag();
   };
 
@@ -885,13 +882,8 @@ document.fonts.ready.then(() => {
         hoverOverlay.style.opacity = '1';
         hoverOverlay.onclick = () => window.open(g.dataset.url, '_blank');
       });
-      g.addEventListener('mouseleave', () => {
-        if (magMode) return;
-        setTimeout(() => {
-          hoverOverlay.style.opacity = '0';
-          hoverOverlay.style.pointerEvents = 'none';
-        }, 60);
-      });
+      // No mouseleave on g — the scaled overlay covers g, causing spurious mouseleave + flicker.
+      // Only the overlay's own mouseleave (when mouse truly leaves the expanded area) hides it.
     }
 
     g.addEventListener('click', (e) => {
