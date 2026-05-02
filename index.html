@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SPGo 🧩</title>
+<title>SPGo Structure</title>
 <meta property="og:title" content="SPGo Structure Diagram">
 <meta property="og:image" content="https://i.postimg.cc/kXPFJh6w/Bussoge-twin.png">
 <meta property="og:type" content="website">
@@ -65,7 +65,7 @@ svg { display: block; overflow: visible; }
 #collapse-btn { display:none; width:100%; background:none; border:none;
   color:rgba(255,255,255,0.45); font-size:16px; cursor:pointer; padding:2px 0 4px;
   text-align:center; font-family:'Cinzel',serif; }
-#collapsible { overflow:hidden; transition:max-height 0.3s ease; max-height:200px; }
+#collapsible { overflow:hidden; transition:max-height 0.3s ease; max-height:400px; }
 
 /* ── Mobile ── */
 @media (max-width:768px) {
@@ -80,17 +80,6 @@ svg { display: block; overflow: visible; }
   #mag-label { font-size: 15px; }
   #controls { gap: 10px; flex-wrap: wrap; }
   #wrap { height: calc(100vh - 56px); }
-}
-
-/* ── Print styles ── */
-@media print {
-  body { background: #04042A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  #header { display: none !important; }
-  #wrap { height: auto !important; overflow: visible !important; border: none !important;
-    position: static !important; }
-  #canvas { transform: none !important; position: static !important; }
-  svg { width: 100% !important; height: auto !important; }
-  #mag-modal-backdrop, #mag-hint-bar { display: none !important; }
 }
 </style>
 </head>
@@ -113,11 +102,17 @@ svg { display: block; overflow: visible; }
     <span id="zoom-label">100%</span>
     <button onclick="zoom(0.15)">＋</button>
     <button onclick="resetView()">⊡ Fit</button>
-    <button onclick="printDiagram()">🖨 Print</button>
     <div id="mag-btn" onclick="toggleMag()">
       <span id="mag-icon">🔍</span>
       <span id="mag-label">Off</span>
     </div>
+  </div>
+  <div style="text-align:center;margin-top:5px;padding-bottom:4px;">
+    <button id="export-btn" onclick="exportPNG()" style="background:rgba(255,220,0,0.12);
+      border:1px solid rgba(255,220,0,0.35);color:#FFE000;font-family:'Cinzel',serif;
+      font-size:11px;padding:3px 16px;border-radius:20px;cursor:pointer;">
+      📷 Save as Image
+    </button>
   </div>
   </div>
 </div>
